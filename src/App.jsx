@@ -1,43 +1,46 @@
-import React, { useEffect, useState } from 'react'
-import Formulario from './components/Formulario.jsx'
-import TodoList from './components/TodoList.jsx'
-import EditModal from './components/EditModal.jsx'
+import React, { useEffect, useState } from 'react';
+import Formulario from './components/Formulario.jsx';
+import TodoList from './components/TodoList.jsx';
+import EditModal from './components/EditModal.jsx';
 
+// Initial state for todos
 const initialState = [
   {
-    id:1,
-    title:"todo 01",
-    description:"Descripcion 01",
-    priority:false,
-    state:true // Cambiamos a un booleano para manejarlo mejor. true = completed
+    id: 1,
+    title: "todo 01",
+    description: "Descripcion 01",
+    priority: false,
+    state: true // Boolean to manage completion status (true = completed)
   },
   {
-    id:2,
-    title:"todo 02",
-    description:"Descripcion 02",
-    priority:false,
-    state:true
+    id: 2,
+    title: "todo 02",
+    description: "Descripcion 02",
+    priority: false,
+    state: true
   }
 ]
 
+/**
+ * Main application component managing todo functionalities.
+ * @returns {JSX.Element} Rendered App component.
+ */
 const App = () => {
+  // State - List of todos
+  const [todos, setTodos] = useState(initialState);
 
-  // Estado - Lista de componentes
-  const [todos, setTodos] = useState(initialState)
-
-  // Funcion añadir tarea
+  // Function to add a todo
   const addTodo = todo => {
-    setTodos([...todos,todo])
+    setTodos([...todos, todo]);
   }
 
-  // Función deleteTodo
+  // Function to delete a todo
   const deleteTodo = id => {
-    const newArray = todos.filter(todo => todo.id !== id)
-    setTodos(newArray)
+    const newArray = todos.filter(todo => todo.id !== id);
+    setTodos(newArray);
   }
 
-  // Función updateTodo
-// Función updateTodo
+  // Function to update a todo's completion status
   const updateTodo = id => {
     const updatedTodos = todos.map(todo => {
       if (todo.id === id) {
@@ -51,6 +54,7 @@ const App = () => {
     setTodos(updatedTodos);
   };
 
+  // Function to sort todos based on completion and priority
   const sortTodos = () => {
     const pendingPriorityTasks = todos.filter(todo => !todo.state && todo.priority);
     const pendingNonPriorityTasks = todos.filter(todo => !todo.state && !todo.priority);
@@ -64,7 +68,7 @@ const App = () => {
     }
   };
 
-// Function to check if two arrays are equal
+  // Function to check if two arrays are equal
   const arraysAreEqual = (arr1, arr2) => {
     if (arr1.length !== arr2.length) return false;
     for (let i = 0; i < arr1.length; i++) {
@@ -78,43 +82,48 @@ const App = () => {
     sortTodos();
   }, [todos]);
 
+  // State for managing the modal visibility and the selected todo
   const [showModal, setShowModal] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState(null);
 
+  // Log changes in 'showModal'
   useEffect(() => {
     console.log('showModal value changed:', showModal);
   }, [showModal]);
 
+  // Function to open the edit modal for a todo
   const openModal = todo => {
     setSelectedTodo(todo); // Pass the entire todo object
     setShowModal(true);
   };
 
+  // Function to close the edit modal
   const closeModal = () => {
     setSelectedTodo(null);
     setShowModal(false);
   };
 
+  // Function to edit a todo
   const editTodo = (id, updatedTodo) => {
     const updatedTodos = todos.map(todo => (todo.id === id ? updatedTodo : todo));
     setTodos(updatedTodos);
   };
-  
+
   return (
     <div className='container'>
       <h1>Formularios</h1>
-      < Formulario addTodo = {addTodo} />
+      <Formulario addTodo={addTodo} />
       <TodoList todos={todos} deleteTodo={deleteTodo} updateTodo={updateTodo} openModal={openModal} />
       {showModal && (
         <EditModal
           todo={selectedTodo}
           editTodo={editTodo}
           closeModal={closeModal}
-          showModal={showModal}// Pass down closeModal function
+          showModal={showModal} // Pass down showModal state
         />
       )}
     </div>
   )
 }
 
-export default App
+export default App;
