@@ -3,11 +3,7 @@ Course event
 
 Funcionalidades del Todo:
 
-- Añadir tarea
 
-- Eliminar tarea
-
-- Completar tarea (visualmente debe mostrar que se ha completado)
 
 - Editar tarea (Debe permitir editar las tareas almacenadas)
 

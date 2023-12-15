@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Formulario from './components/Formulario.jsx'
 import TodoList from './components/TodoList.jsx'
 
@@ -8,7 +8,7 @@ const initialState = [
     title:"todo 01",
     description:"Descripcion 01",
     priority:false,
-    state:true // Cambiamos a un booleano para manejarlo mejor.
+    state:true // Cambiamos a un booleano para manejarlo mejor. true = completed
   },
   {
     id:2,
@@ -36,15 +36,46 @@ const App = () => {
   }
 
   // Función updateTodo
+// Función updateTodo
   const updateTodo = id => {
-    const newArray = todos.map(todo => {
+    const updatedTodos = todos.map(todo => {
       if (todo.id === id) {
-        todo.state = !todo.state
+        return {
+          ...todo,
+          state: !todo.state // Update the state property immutably
+        };
       }
-      return todo
-    })
-    setTodos(newArray)
-  }
+      return todo;
+    });
+    setTodos(updatedTodos);
+  };
+
+  const sortTodos = () => {
+    const pendingPriorityTasks = todos.filter(todo => !todo.state && todo.priority);
+    const pendingNonPriorityTasks = todos.filter(todo => !todo.state && !todo.priority);
+    const completedTasks = todos.filter(todo => todo.state);
+
+    const sorted = [...pendingPriorityTasks, ...pendingNonPriorityTasks, ...completedTasks];
+
+    // Check if the sorted array is different from the current todos state
+    if (!arraysAreEqual(sorted, todos)) {
+      setTodos([...sorted]); // Update state triggering re-render
+    }
+  };
+
+// Function to check if two arrays are equal
+  const arraysAreEqual = (arr1, arr2) => {
+    if (arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
+  };
+
+  // Automatically sort on load or when there's a change in 'todos'
+  useEffect(() => {
+    sortTodos();
+  }, [todos]);
 
   console.log(<div className='container'>
     <h1>Formularios</h1>
