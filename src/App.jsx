@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Formulario from './components/Formulario.jsx'
 import TodoList from './components/TodoList.jsx'
+import EditModal from './components/EditModal.jsx'
 
 const initialState = [
   {
@@ -77,17 +78,41 @@ const App = () => {
     sortTodos();
   }, [todos]);
 
-  console.log(<div className='container'>
-    <h1>Formularios</h1>
-    < Formulario addTodo = {addTodo} />
-    < TodoList todos={todos} deleteTodo={deleteTodo} updateTodo={updateTodo}/>
-  </div>)
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState(null);
+
+  useEffect(() => {
+    console.log('showModal value changed:', showModal);
+  }, [showModal]);
+
+  const openModal = todo => {
+    setSelectedTodo(todo); // Pass the entire todo object
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setSelectedTodo(null);
+    setShowModal(false);
+  };
+
+  const editTodo = (id, updatedTodo) => {
+    const updatedTodos = todos.map(todo => (todo.id === id ? updatedTodo : todo));
+    setTodos(updatedTodos);
+  };
   
   return (
     <div className='container'>
       <h1>Formularios</h1>
       < Formulario addTodo = {addTodo} />
-      < TodoList todos={todos} deleteTodo={deleteTodo} updateTodo={updateTodo}/>
+      <TodoList todos={todos} deleteTodo={deleteTodo} updateTodo={updateTodo} openModal={openModal} />
+      {showModal && (
+        <EditModal
+          todo={selectedTodo}
+          editTodo={editTodo}
+          closeModal={closeModal}
+          showModal={showModal}// Pass down closeModal function
+        />
+      )}
     </div>
   )
 }
