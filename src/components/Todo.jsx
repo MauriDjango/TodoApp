@@ -1,5 +1,13 @@
-import React from 'react'
+import React from 'react';
 
+/**
+ * Component representing a single todo item.
+ * @param {Function} openModal - Function to open the modal for editing the todo.
+ * @param {Object} todo - The todo object containing details like title, description, priority, and state.
+ * @param {Function} deleteTodo - Function to delete the todo item.
+ * @param {Function} updateTodo - Function to update the state of the todo.
+ * @returns {JSX.Element} Rendered Todo component.
+ */
 export const Todo = ({ openModal, todo, deleteTodo, updateTodo }) => {
   const { id, title, description, priority, state } = todo;
 
@@ -25,3 +33,4 @@ export const Todo = ({ openModal, todo, deleteTodo, updateTodo }) => {
   );
 };
 
+export default Todo;

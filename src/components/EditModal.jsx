@@ -1,28 +1,43 @@
 import React, { useState } from 'react';
 
+/**
+ * EditModal component for editing todo items.
+ * @param {Object} props - Component props
+ * @param {Object} props.todo - The todo item being edited
+ * @param {function} props.editTodo - Function to edit the todo item
+ * @param {function} props.closeModal - Function to close the modal
+ * @param {boolean} props.showModal - Indicates if the modal should be displayed
+ * @returns {JSX.Element} - Rendered component
+ */
 const EditModal = ({ todo, editTodo, closeModal, showModal }) => {
+  // State to manage the edited todo item
   const [editedTodo, setEditedTodo] = useState({ ...todo });
 
+  // Handles changes in input fields
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    let newValue = value
+
+    let newValue = value;
     if (type === 'checkbox') {
       newValue = checked;
     } else if (name === 'state') {
       newValue = value === 'completada';
     }
 
+    // Updates the edited todo with the new value
     setEditedTodo({
       ...editedTodo,
       [name]: newValue,
     });
   };
 
+  // Handles form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    editTodo(todo.id, editedTodo);
-    closeModal();
+    editTodo(todo.id, editedTodo); // Edit the todo item
+    closeModal(); // Close the modal after submission
   };
+
 
   return (
     <>
