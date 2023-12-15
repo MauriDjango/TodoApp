@@ -27,7 +27,7 @@ import Swal from "sweetalert2"
       ...todo,
       id:Date.now(),
       // state: state === "completada"? true:false
-      state: state == "completada"
+      state: state === "completada"
 
      })
     
